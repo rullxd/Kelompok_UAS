@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Settings</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec"
+                    },
+                    fontFamily: {
+                        display: ["Lexend", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-100 font-display">
+
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r p-6 hidden lg:block">
+            <h1 class="text-xl font-bold text-primary mb-6">SIMPEL-K</h1>
+
+            <nav class="space-y-2">
+                <a href="#" class="block px-3 py-2 rounded bg-primary text-white">Settings</a>
+                <a href="#" class="block px-3 py-2 rounded hover:bg-slate-100">Dashboard</a>
+                <a href="#" class="block px-3 py-2 rounded hover:bg-slate-100">Reports</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <h2 class="text-3xl font-bold mb-2">System Settings</h2>
+            <p class="text-slate-600 mb-6">
+                Halaman pengaturan sistem (tanpa login, HTML statis).
+            </p>
+
+            <!-- Card -->
+            <div class="bg-white rounded-xl shadow p-6 max-w-2xl">
+                <h3 class="text-lg font-semibold mb-4">Application Identity</h3>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Site Name</label>
+                        <input type="text" value="SIMPEL-K" class="w-full border rounded px-3 py-2">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Campus Code</label>
+                        <input type="text" value="UNIV-JKT-001" class="w-full border rounded px-3 py-2">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Support Email</label>
+                        <input type="email" value="support@campus.edu" class="w-full border rounded px-3 py-2">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button class="px-4 py-2 rounded bg-slate-200">Cancel</button>
+                    <button class="px-4 py-2 rounded bg-primary text-white">Save</button>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+
+</html>
