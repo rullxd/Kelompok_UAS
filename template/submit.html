@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Complaint</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background: #f4f6f8;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        .box {
+            width: 420px;
+            background: white;
+            margin: 80px auto;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 12px;
+        }
+
+        button {
+            background: #1e88e5;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Submit Complaint</h2>
+
+    <form id="complaintForm">
+        <input type="text" id="student_id" placeholder="Student ID" required>
+        <input type="text" id="category" placeholder="Category" required>
+        <textarea id="description" placeholder="Complaint Description" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("complaintForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    fetch("/api/ping")
+        .then(res => res.json())
+        .then(() => alert("Complaint submitted (static demo)"));
+});
+</script>
+
+</body>
+</html>
