@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaints | SIMPEL-K</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec"
+                    },
+                    fontFamily: {
+                        display: ["Lexend", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-100 font-display">
+
+<div class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r p-6 hidden lg:block">
+        <h1 class="text-xl font-bold text-primary mb-6">SIMPEL-K</h1>
+        <nav class="space-y-2">
+            <a href="/static.html" class="block px-3 py-2 rounded bg-primary text-white">Complaints</a>
+            <a href="/reports" class="block px-3 py-2 rounded hover:bg-slate-100">Reports</a>
+            <a href="/admin/settings" class="block px-3 py-2 rounded hover:bg-slate-100">Settings</a>
+        </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 p-8">
+        <h2 class="text-2xl font-bold mb-4">All Complaints</h2>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <table class="w-full text-sm">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-4 py-3">ID</th>
+                        <th class="px-4 py-3">Student</th>
+                        <th class="px-4 py-3">Category</th>
+                        <th class="px-4 py-3">Description</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-t">
+                        <td class="px-4 py-3">CMP-001</td>
+                        <td class="px-4 py-3">22010101</td>
+                        <td class="px-4 py-3">Facility</td>
+                        <td class="px-4 py-3">Broken chair</td>
+                        <td class="px-4 py-3 text-yellow-600">Pending</td>
+                        <td class="px-4 py-3">2025-01-10</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="text-center text-slate-400 mt-6">
+                Static HTML – no database, no login
+            </p>
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>
