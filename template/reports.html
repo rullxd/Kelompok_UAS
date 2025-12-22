@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports | Campus Complaint System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        header {
+            background-color: #1e88e5;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f0f2f5;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .progress {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .done {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Complaint Reports</h1>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h3>List of Complaints</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Student ID</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>22010101</td>
+                    <td>Facility</td>
+                    <td>Broken chair in classroom</td>
+                    <td><span class="status pending">Pending</span></td>
+                    <td>2025-01-10</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>22010233</td>
+                    <td>IT Service</td>
+                    <td>WiFi not working</td>
+                    <td><span class="status progress">In Progress</span></td>
+                    <td>2025-01-11</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>22010377</td>
+                    <td>Facility</td>
+                    <td>Air conditioner broken</td>
+                    <td><span class="status done">Completed</span></td>
+                    <td>2025-01-12</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

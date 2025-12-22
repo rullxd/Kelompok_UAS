@@ -54,6 +54,10 @@ func setupRoutes() *gin.Engine {
 		c.File("./template/complaints.html")
 	})
 
+	r.GET("/forgot-password", func(c *gin.Context) {
+		c.File("./template/forgot_password.html")
+	})
+
 	r.GET("/admin/settings", func(c *gin.Context) {
 		c.File("./template/settings.html")
 	})
