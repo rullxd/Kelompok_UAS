@@ -62,6 +62,10 @@ func setupRoutes() *gin.Engine {
 		c.File("./template/settings.html")
 	})
 
+	r.GET("/reports", func(c *gin.Context) {
+		c.File("./template/reports.html")
+	})
+
 	// API (dummy supaya compile)
 	api := r.Group("/api")
 	{
