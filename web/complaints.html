@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Complaints Management - SIMPEL-K Admin</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1a2632",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- SideNavBar -->
+<aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-card-light dark:bg-card-dark flex flex-col transition-all duration-300 transform -translate-x-full lg:translate-x-0">
+<div class="p-6 flex items-center gap-3">
+<div class="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-none">SIMPEL-K</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Admin Portal</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 py-2 space-y-1">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                    href="/admin/dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                    href="/admin/announcements">
+                    <span class="material-symbols-outlined">campaign</span>
+                    <span class="font-medium">Announcements</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary text-white group"
+                    href="/admin/complaints">
+<span class="material-symbols-outlined">inbox</span>
+<span class="font-medium">Complaints</span>
+                    <span
+                        class="ml-auto bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 py-0.5 px-2 rounded-full text-xs font-bold pointer-events-none"
+                        id="pendingCount">0</span>
+</a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                    href="/admin/users">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Users</span>
+</a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                    href="/admin/reports">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-medium">Reports</span>
+</a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                    href="/admin/settings">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+<button id="themeToggle" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" id="themeIcon">dark_mode</span>
+<span class="font-medium" id="themeText">Dark Mode</span>
+</button>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-600 dark:hover:text-red-400 transition-colors" href="#" onclick="if(typeof AuthAPI !== 'undefined') { AuthAPI.logout(); } return false;">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- TopNavBar -->
+<header class="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-card-light dark:bg-card-dark shrink-0">
+<div class="flex items-center gap-4">
+<button id="mobileMenuBtn" class="lg:hidden p-2 text-slate-600 dark:text-slate-300" onclick="toggleSidebar()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search Bar -->
+<div class="relative hidden md:flex items-center w-80">
+<span class="absolute left-3 text-slate-400 material-symbols-outlined" style="font-size: 20px;">search</span>
+<input id="searchInput" class="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 border-none text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary placeholder:text-slate-400" placeholder="Search complaints, students..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button id="notificationBtn" class="relative p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span id="notificationBadge" class="absolute top-2 right-2 size-2.5 bg-red-500 rounded-full border-2 border-white dark:border-card-dark hidden"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Admin User</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Super Admin</p>
+</div>
+<div class="size-9 rounded-full bg-cover bg-center border border-slate-200 dark:border-slate-700" data-alt="Admin user profile picture showing a smiling man" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAcpBySpweN0wxj3zarHsqjvRP3tf9kz9yiOrJ3LtXP8Ixa0usvjqQDv7bJCBIfY8b1NKtTzxHXtZESFmFoAXlkJmKLxwuwq5bo04VdC0GZhOq1V3VXBA-UOOhZXFqVLMlK_4yOFiBqiKZfLBV6jVIKX1dPZXc8Q46rSdIJjTEFDC40O-2u6tCC66eo4DL88sU-_lc-cDw-wObYWzGOJTOK37k-SOtEdELtNXikOuPcknmc8qnudkwOU8pAsct2T6QmwyvPsM92G1U");'>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 md:p-8 bg-background-light dark:bg-background-dark">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">All Complaints</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage and track all student complaints.</p>
+</div>
+<div class="flex gap-3">
+<button id="filterAll" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shadow-sm">All</button>
+<button id="filterPending" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">Pending</button>
+<button id="filterInProcess" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">In Process</button>
+<button id="filterCompleted" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">Completed</button>
+</div>
+</div>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+<div class="bg-card-light dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-primary">
+<span class="material-symbols-outlined">folder_open</span>
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Complaints</p>
+<h3 id="totalComplaints" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0</h3>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg text-amber-600">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Pending</p>
+<h3 id="pendingComplaints" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0</h3>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600">
+<span class="material-symbols-outlined">timelapse</span>
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">In Process</p>
+<h3 id="inProcessComplaints" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0</h3>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-600">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Completed</p>
+<h3 id="completedComplaints" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0</h3>
+</div>
+</div>
+</div>
+<!-- Complaints Table -->
+<div class="bg-card-light dark:bg-card-dark border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Complaints List</h3>
+<div class="flex gap-2">
+<div class="relative">
+<input id="tableSearchInput" class="pl-9 pr-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:ring-1 focus:ring-primary focus:border-primary w-full sm:w-64" placeholder="Search table..." type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-slate-400" style="font-size: 18px;">search</span>
+</div>
+<button id="exportBtn" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+Export
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+<thead class="bg-slate-50 dark:bg-slate-900/50 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4 whitespace-nowrap">Ticket ID</th>
+<th class="px-6 py-4 whitespace-nowrap">Subject</th>
+<th class="px-6 py-4 whitespace-nowrap">Student</th>
+<th class="px-6 py-4 whitespace-nowrap">Category</th>
+<th class="px-6 py-4 whitespace-nowrap">Date</th>
+<th class="px-6 py-4 whitespace-nowrap">Status</th>
+<th class="px-6 py-4 whitespace-nowrap text-right">Actions</th>
+</tr>
+</thead>
+<tbody id="complaintsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr>
+<td colspan="7" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">Loading complaints...</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<p id="paginationInfo" class="text-sm text-slate-500 dark:text-slate-400">Loading...</p>
+<div class="flex gap-2">
+<button id="prevPageBtn" class="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Previous</button>
+<button id="nextPageBtn" class="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Overlay for Mobile -->
+<div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden" onclick="toggleSidebar()"></div>
+<!-- Notification Popup -->
+<div id="notificationPopup" class="hidden fixed top-16 right-6 z-50 w-96 max-w-[calc(100vw-2rem)] bg-card-light dark:bg-card-dark border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl max-h-[600px] flex flex-col">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Notifications</h3>
+<div class="flex items-center gap-2">
+<button id="markAllReadBtn" class="text-xs text-primary hover:text-blue-600 font-medium">Mark all as read</button>
+<button id="closeNotificationBtn" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+</button>
+</div>
+</div>
+<div id="notificationList" class="flex-1 overflow-y-auto p-2">
+<div class="text-center text-slate-500 dark:text-slate-400 py-8">Loading notifications...</div>
+</div>
+<div class="p-3 border-t border-slate-200 dark:border-slate-800 text-center">
+<a href="#" class="text-sm text-primary hover:text-blue-600 font-medium">View All Notifications</a>
+</div>
+</div>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/complaints.js"></script>
+<script>
+    // Initialize theme
+    if (typeof ThemeManager !== 'undefined') {
+        ThemeManager.init();
+        
+        // Update theme toggle button UI
+        const updateThemeToggle = () => {
+            const theme = ThemeManager.getTheme();
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            if (themeIcon && themeText) {
+                if (theme === 'dark') {
+                    themeIcon.textContent = 'light_mode';
+                    themeText.textContent = 'Light Mode';
+                } else {
+                    themeIcon.textContent = 'dark_mode';
+                    themeText.textContent = 'Dark Mode';
+                }
+            }
+        };
+        
+        // Set initial UI
+        updateThemeToggle();
+        
+        // Handle theme toggle button click
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                ThemeManager.toggle();
+                updateThemeToggle();
+            });
+        }
+    }
+    
+    // Notification functions
+    async function loadNotifications() {
+        try {
+            const response = await NotificationAPI.getAll({ limit: 20 });
+            if (response && response.data) {
+                displayNotifications(response.data);
+                updateNotificationBadge(response.unread_count || 0);
+            }
+        } catch (error) {
+            console.error('Error loading notifications:', error);
+        }
+    }
+
+    function displayNotifications(notifications) {
+        const notificationList = document.getElementById('notificationList');
+        if (!notificationList) return;
+
+        if (notifications.length === 0) {
+            notificationList.innerHTML = '<div class="text-center text-slate-500 dark:text-slate-400 py-8">No notifications</div>';
+            return;
+        }
+
+        notificationList.innerHTML = notifications.map(notif => `
+            <div class="p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer ${!notif.is_read ? 'bg-blue-50 dark:bg-blue-900/10' : ''}" onclick="handleNotificationClick(${notif.id}, ${notif.related_id || 'null'}, '${notif.type}')">
+                <div class="flex items-start gap-3">
+                    <div class="size-10 rounded-full ${getNotificationIconColor(notif.type)} flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-white" style="font-size: 20px;">${getNotificationIcon(notif.type)}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <h4 class="text-sm font-semibold text-slate-900 dark:text-white ${!notif.is_read ? 'font-bold' : ''}">${notif.title}</h4>
+                            ${!notif.is_read ? '<span class="size-2 rounded-full bg-primary flex-shrink-0 mt-1"></span>' : ''}
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">${notif.message}</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">${formatNotificationTime(notif.created_at)}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function getNotificationIcon(type) {
+        const icons = {
+            'complaint_update': 'inbox',
+            'announcement': 'campaign',
+            'system': 'inbox',
+            'other': 'notifications',
+        };
+        return icons[type] || 'notifications';
+    }
+
+    function getNotificationIconColor(type) {
+        const colors = {
+            'complaint_update': 'bg-blue-500',
+            'announcement': 'bg-purple-500',
+            'system': 'bg-green-500',
+            'other': 'bg-slate-500',
+        };
+        return colors[type] || 'bg-slate-500';
+    }
+
+    function formatNotificationTime(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
+    }
+
+    function updateNotificationBadge(count) {
+        const badge = document.getElementById('notificationBadge');
+        if (badge) {
+            if (count > 0) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    }
+
+    async function handleNotificationClick(notificationId, relatedId, type) {
+        try {
+            await NotificationAPI.markAsRead(notificationId);
+            await loadNotifications();
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+
+        if ((type === 'complaint_update' || type === 'system') && relatedId) {
+            window.location.href = `/admin/complaint/${relatedId}`;
+        } else if (type === 'announcement' && relatedId) {
+            try {
+                const announcement = await AnnouncementAPI.getById(relatedId);
+                if (announcement) {
+                    const popup = document.getElementById('notificationPopup');
+                    if (popup) popup.classList.add('hidden');
+                    alert(`Announcement: ${announcement.title}\n\n${announcement.content}`);
+                }
+            } catch (error) {
+                console.error('Error loading announcement:', error);
+            }
+        }
+    }
+
+    // Setup notification event listeners
+    function setupNotificationListeners() {
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationPopup = document.getElementById('notificationPopup');
+        const closeNotificationBtn = document.getElementById('closeNotificationBtn');
+        const markAllReadBtn = document.getElementById('markAllReadBtn');
+
+        if (notificationBtn && notificationPopup) {
+            notificationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationPopup.classList.toggle('hidden');
+                if (!notificationPopup.classList.contains('hidden')) {
+                    loadNotifications();
+                }
+            });
+        }
+
+        if (closeNotificationBtn && notificationPopup) {
+            closeNotificationBtn.addEventListener('click', () => {
+                notificationPopup.classList.add('hidden');
+            });
+        }
+
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', async () => {
+                try {
+                    await NotificationAPI.markAllAsRead();
+                    await loadNotifications();
+                } catch (error) {
+                    console.error('Error marking all as read:', error);
+                }
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (notificationPopup && !notificationPopup.contains(e.target) && notificationBtn && !notificationBtn.contains(e.target)) {
+                notificationPopup.classList.add('hidden');
+            }
+        });
+    }
+
+    // Load notifications on page load
+    if (typeof NotificationAPI !== 'undefined') {
+        loadNotifications();
+        setupNotificationListeners();
+    }
+    
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar) {
+            const isHidden = sidebar.classList.contains('-translate-x-full');
+            if (isHidden) {
+                // Open sidebar
+                sidebar.classList.remove('-translate-x-full');
+                if (overlay) {
+                    overlay.classList.remove('hidden');
+                }
+            } else {
+                // Close sidebar
+                sidebar.classList.add('-translate-x-full');
+                if (overlay) {
+                    overlay.classList.add('hidden');
+                }
+            }
+        }
+    }
+    
+    // Close sidebar when clicking overlay or outside
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('sidebarOverlay');
+        const sidebar = document.getElementById('sidebar');
+        
+        // Close when clicking overlay
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                    toggleSidebar();
+                }
+            });
+        }
+        
+        // Close when clicking outside sidebar (on mobile only)
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 1024) { // Only on mobile/tablet
+                const sidebar = document.getElementById('sidebar');
+                const menuBtn = document.getElementById('mobileMenuBtn');
+                
+                if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                    // Check if click is outside sidebar and menu button
+                    if (!sidebar.contains(e.target) && 
+                        (!menuBtn || !menuBtn.contains(e.target))) {
+                        toggleSidebar();
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
+

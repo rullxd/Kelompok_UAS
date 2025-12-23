@@ -1,4 +1,4 @@
-module uas_cloudcomputing
+module simplee-k
 
 go 1.21
 
